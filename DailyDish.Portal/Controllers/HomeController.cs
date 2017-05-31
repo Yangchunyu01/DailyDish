@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -43,24 +44,13 @@ namespace DailyDish.Portal.Controllers
             return View("ShowFoodInfo");
         }
 
-        public ActionResult SubmitTaste(string[] likeTaste, string[] dislikeTaste, string[] taboo, string otherTaboo)
+        public ActionResult SubmitTaste(string[] likeTaste, string[] dislikeTaste, string[] taboo, string[] otherTaboo)
         {
             DailyDishHelper ddh = new DailyDishHelper();
             UserInfo user = (UserInfo)Session["wechat"];
-            if (!string.IsNullOrEmpty(otherTaboo))
+            if (otherTaboo.Length > 0)
             {
-                string regex = @"[,|，|\s]+";
-                string others = otherTaboo.Replace(Regex.Match(otherTaboo, regex).Value, ",");
-                string[] newOthers = others.Split(',');
-                if (taboo == null)
-                {
-                    taboo = newOthers;
-                }
-                else
-                {
-                    taboo = taboo.Concat(newOthers).ToArray();
-                }
-                ddh.AddTabooData(newOthers);
+                ddh.AddTabooData(otherTaboo);
             }
             Guid historyId = Guid.NewGuid();
             ddh.SaveUserTaste(new TasteHistory()

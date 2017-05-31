@@ -8,7 +8,7 @@
     </div>
 </div>
 <div id="secondPage" hidden>
-    <h3 class="questionHeader">2/3哪些是你特别不喜欢的口味？</h3>
+    <div class="questionHeader">2/3哪些是你特别不喜欢的口味？</div>
     @Html.Partial("_LikeTaste", Model.Flavor.Where(x => x.Type == "dislike").ToList())
 
     <div class="buttonBox  buttonBox1">
@@ -17,7 +17,7 @@
     </div>
 </div>
 <div id="thirdPage" hidden>
-    <h3 class="questionHeader">3/3哪些是你绝对不会吃的东西？</h3>
+    <div class="questionHeader">3/3哪些是你绝对不会吃的东西？</div>
     @Html.Partial("_LikeTaste", Model.Flavor.Where(x => x.Type == "taboo").ToList())
     <div class="buttonBox">
         <div class="othsers">
@@ -32,6 +32,7 @@
     var likeTaste = [];
     var dislikeTaste = [];
     var taboo = [];
+    var otherTaboo = [];
 
     var PageLoad = {
         FirstStep: function () {
@@ -90,7 +91,6 @@
             }
             else if (type == "dislike") {
                 var i = dislikeTaste.indexOf(flavorName);
-                var j = document.getElementById("otherDisTaste").value;
                 if (i != -1) {
                     dislikeTaste.splice(i, 1);
                 }
@@ -105,7 +105,7 @@
     }
 
     function SubmitTaste() {
-        var otherTaboo = document.getElementById("otherTabooTaste").value;
+        CheckOtherTaboo();
         $.ajax({
             url: '/Home/SubmitTaste',
             type: 'POST',
@@ -127,4 +127,13 @@
         })
     }
 
+    function CheckOtherTaboo() {
+        var inputValue = document.getElementById("otherTabooTaste").value;
+        var temp = inputValue.replace(/[,|，|\s]+/g, ',');
+        var i = temp.indexOf(",");
+        if (i != -1) {
+            otherTaboo = otherTaboo.concat(temp.split(','));
+        }
+        taboo.push(temp);
+    }
 </script>

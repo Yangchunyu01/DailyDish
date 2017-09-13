@@ -70,7 +70,7 @@ namespace DailyDish.Wechat.Handlers
         /// <returns></returns>
         private string SubscribeEventHandler(EventMessage em)
         {
-       
+            
             TextMessage tm = new TextMessage();
             tm.ToUserName = em.FromUserName;
             tm.FromUserName = em.ToUserName;
@@ -86,7 +86,8 @@ namespace DailyDish.Wechat.Handlers
         /// <returns></returns>
         private string ScanSubscribeEventHandler(EventMessage em)
         {
-            
+            ImageMessage im = new ImageMessage();
+            im.
             TextMessage tm = new TextMessage();
             tm.ToUserName = em.FromUserName;
             tm.FromUserName = em.ToUserName;

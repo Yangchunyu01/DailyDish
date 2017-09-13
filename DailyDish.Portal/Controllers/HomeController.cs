@@ -78,5 +78,10 @@ namespace DailyDish.Portal.Controllers
             model = ddh.GetDishByUser(userOpenId);
             return View("ShowFoodInfo", model);
         }
+
+        public void SaveDislikeDish(string dishId)
+        {
+
+        }
     }
 }

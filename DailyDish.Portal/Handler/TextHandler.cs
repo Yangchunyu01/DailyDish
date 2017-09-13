@@ -86,7 +86,7 @@ namespace DailyDish.Portal.Handler
                 DishesModel model = ddh.GetDishByUser(tm.FromUserName);
                 ddh.SaveRecommendHistory(tm.FromUserName, model.Id, model.Score, model.DishName);
                 ddh.UpdateDishScore(tm.FromUserName, model.Id);
-                tm.Content = "请点此链接查看你的专属推荐" + ConfigurationManager.AppSettings["RecommendUrl"] + tm.FromUserName; ;
+                tm.Content = "请点此链接查看你的专属推荐" + ConfigurationManager.AppSettings["RecommendUrl"] + tm.FromUserName;
             }
 
 

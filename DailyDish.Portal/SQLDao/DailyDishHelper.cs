@@ -407,56 +407,79 @@ namespace DailyDish.Portal.SQLDll
             InsertScore(scoreList);
             return true;
         }
-        
 
 
-    public bool UpdateDishScore(string openId, string disedId)
-    {
-        return UpdateScore(openId, disedId);
-    }
 
-    public void SaveRecommendHistory(string openId, string dishesId, double score, string dishName)
-    {
-        RecommendedHistory history = new RecommendedHistory()
+        public bool UpdateDishScore(string openId, string disedId)
         {
-            Id = Guid.NewGuid().ToString(),
-            OpenId = openId,
-            DishesId = dishesId,
-            DishName = dishName,
-            Score = score,
-            CreateTime = DateTime.Now,
-        };
-        InsertRecommendedHistory(history);
-    }
-
-    public DishesModel GetDishByUser(string openId)
-    {
-        List<DishScore> score = QueryScoreByUser(openId);
-        if (score.Count == 0)
-        {
-            GetFactorScore(openId);
-            score = QueryScoreByUser(openId);
+            return UpdateScore(openId, disedId);
         }
-        DishScore dishscore = score.OrderByDescending(r => r.Score).ThenBy(r => r.DishesId).First();
-        Dishes dish = QueryDishesById(dishscore.DishesId);
-        DishesModel model = new DishesModel()
-        {
-            Id = dishscore.DishesId,
-            DishImage = dish.DishImage,
-            SecondTaste = dish.SecondTaste,
-            Status = dish.Status,
-            Accessory = dish.Accessory,
-            CreateTime = dish.CreateTime,
-            DishName = dish.DishName,
-            Explain = dish.Explain,
-            FirstTaste = dish.FirstTaste,
-            MainIngredients = dish.MainIngredients,
-            PracticeUrl = dish.PracticeUrl,
-            Score = dishscore.Score
-        };
 
-        return model;
+        public void SaveRecommendHistory(string openId, string dishesId, double score, string dishName)
+        {
+            RecommendedHistory history = new RecommendedHistory()
+            {
+                Id = Guid.NewGuid().ToString(),
+                OpenId = openId,
+                DishesId = dishesId,
+                DishName = dishName,
+                Score = score,
+                CreateTime = DateTime.Now,
+            };
+            InsertRecommendedHistory(history);
+        }
+
+        private static int i = 0;
+        public DishesModel GetDishByUser(string openId)
+        {
+            i++;
+            List<DishScore> score = QueryScoreByUser(openId);
+            if (score.Count == 0)
+            {
+                GetFactorScore(openId);
+                score = QueryScoreByUser(openId);
+            }
+            Dishes dish = new Dishes();
+            List<DishScore> bestDishScroe = new List<DishScore>();
+            //DishScore dishscore = score.OrderByDescending(r => r.Score).ThenBy(r => r.DishesId).First();
+            bestDishScroe = score.Where(r => r.Score == 0.5).ToList();
+            if (bestDishScroe.Count > 0)
+            {
+                int i = GetRadomValue(0, bestDishScroe.Count);
+                dish = QueryDishesById(bestDishScroe[i].DishesId);
+            }
+            else
+            {
+                bestDishScroe = score.Where(r => r.Score < 0.5).ToList();
+                int i = GetRadomValue(0, bestDishScroe.Count);
+                dish = QueryDishesById(bestDishScroe[i].DishesId);
+            }
+            List<DishScore> dishscoreList = score.OrderByDescending(r => r.Score).ToList();
+
+            DishesModel model = new DishesModel()
+            {
+                Id = dishscoreList[i].DishesId,
+                DishImage = dish.DishImage,
+                SecondTaste = dish.SecondTaste,
+                Status = dish.Status,
+                Accessory = dish.Accessory,
+                CreateTime = dish.CreateTime,
+                DishName = dish.DishName,
+                Explain = dish.Explain,
+                FirstTaste = dish.FirstTaste,
+                MainIngredients = dish.MainIngredients,
+                PracticeUrl = dish.PracticeUrl,
+                Score = dishscoreList[i].Score
+            };
+            return model;
+        }
+
+        private int GetRadomValue(int min, int max)
+        {
+            Random rn = new Random();
+            int i = rn.Next(min, max);
+            return i;
+        }
     }
-}
 
 }

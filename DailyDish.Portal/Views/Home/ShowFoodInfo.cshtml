@@ -1,5 +1,5 @@
 ﻿@model DailyDish.Portal.Models.DishesModel
-<div class="foodCantainer">
+<div id="foodInfoPage" class="foodCantainer">
     <div class="foodTitle">
         <p>今日推荐：@Model.DishName</p>
     </div>
@@ -12,16 +12,22 @@
             @Model.Explain
         </div>
     </div>
-    <div class="buttonBox buttonBox1">
+    <div class="buttonBox buttonBox1 chooseBtn">
         <hr />
         <button type="button" class="btn dislikeDishBtn" onclick="NavToWeb()">就吃它了</button>
-        <button type="button" class="btn" style="background-color:#FF8C00" onclick="ChangeRecommandedDish()">不想吃它</button>
+        <button type="button" class="btn" style="background-color:#FF8C00" onclick="ChooseBtnOnClick()">不想吃它</button>
     </div>
 </div>
 
 <script>
     function NavToWeb() {
         location.href = '@Model.PracticeUrl';
+    }
+
+    function ChooseBtnOnClick()
+    {
+        ChangeRecommandedDish();
+        SaveDislikeDish();
     }
 
     function ChangeRecommandedDish() {
@@ -31,6 +37,23 @@
             dataType: 'application/json',
             data: {
                 openId: null,
+            },
+            success: function (data) {
+                alert(data.responseText);
+            },
+            error: function (data) {
+                document.getElementById("foodInfoPage").innerHTML = data.responseText;
+            }
+        })
+    }
+
+    function SaveDislikeDish() {
+        $.ajax({
+            url: '/Home/SaveDislikeDish',
+            type: 'POST',
+            dataType: 'application/json',
+            data: {
+                dishId: '@Model.Id',
             },
         })
     }

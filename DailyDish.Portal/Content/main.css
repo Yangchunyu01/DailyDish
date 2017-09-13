@@ -128,9 +128,10 @@ body {
 }
 
     .foodCantainer .img {
-        height: 30%;
+        height: 20%;
         text-align: center;
         overflow: hidden;
+        margin-bottom:10%;
     }
 
         .foodCantainer .img img {
@@ -139,19 +140,19 @@ body {
 
     .foodCantainer .foodContent {
         width: 100%;
-        height: 70%;
+        height: 45%;
     }
 
 .foodTitle {
     width: 100%;
-    height: 20%;
+    height: 10%;
     font-size: 1.4em;
     text-align: center;
     font-weight: bold;
     padding-top: 2%;
 }
 
-    .foodTitle span {
+    /*.foodTitle span {
         display: block;
         width: 90%;
         margin: 0 auto;
@@ -166,13 +167,17 @@ body {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-    }
+    }*/
 
-dislikeDishBtn {
+.chooseBtn {
+    padding-bottom:1%;
+}
+
+.dislikeDishBtn {
     background-color: aquamarine;
 }
 
-likeDishBtn {
+.likeDishBtn {
     background-color: #FF8C00;
 }
 
@@ -182,7 +187,6 @@ likeDishBtn {
     border-bottom: 1px solid black;
 }
 
-}
 
 .instructions {
     width: 90%;
